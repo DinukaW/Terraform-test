@@ -1,3 +1,4 @@
+//configuring the provider
 provider "google" {
   credentials = file("todo-app.json")
   project = "todo-app-360014"
@@ -5,6 +6,7 @@ provider "google" {
   zone = "us-west1-b"
 }
 
+//creating compute engine
 resource "google_compute_instance" "default" {
     name = "test"
     machine_type = "e2-micro" 
@@ -27,6 +29,8 @@ resource "google_compute_instance" "default" {
     tags = ["http-server"]
     
 }
+
+//create firewall for http requests
 resource "google_compute_firewall" "default" {
     name = "nginx-firewall"
     network = "default"
@@ -36,6 +40,30 @@ resource "google_compute_firewall" "default" {
       ports = ["80"]
     }
     target_tags =  [ "http-server" ]
+    source_ranges = [ "0.0.0.0/0" ]
 }
 
+//creating cloud sql instance
+resource "google_sql_database_instance" "instance" {
+  name = "test-db-instance2"
+  database_version = "MYSQL_8_0"
+  settings {
+    tier = "db-f1-micro"
+  }
+  deletion_protection  = "false"
+}
+
+//creating database
+resource "google_sql_database" "database" {
+  name = "test-db"
+  instance = google_sql_database_instance.instance.name
+}
+
+//creating new user
+resource "google_sql_user" "users" {
+  name     = "test-user"
+  instance = google_sql_database_instance.instance.name
+  host     = "%"
+  password = "Test123"
+}
 
