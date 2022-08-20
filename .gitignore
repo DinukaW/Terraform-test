@@ -1,0 +1,4 @@
+todo-app.json
+**/.terraform/*
+*.tfstate
+*.tfstate.*
