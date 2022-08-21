@@ -26,4 +26,4 @@ terraform destroy
  - [Google Cloud Platform Provider](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/getting_started)
  - [Compute Engine](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance)
  - [Cloud SQL](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/sql_database_instance)
- - 
+
