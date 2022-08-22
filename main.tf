@@ -13,7 +13,7 @@ resource "google_compute_instance" "default" {
 
     boot_disk {
       initialize_params {
-        image = "ubuntu-os-cloud/ubuntu-1804-lts"
+        image = "ubuntu-os-cloud/ubuntu-2004-lts"
       }
     }
 
@@ -37,7 +37,7 @@ resource "google_compute_firewall" "default" {
   
     allow {
       protocol = "tcp"
-      ports = ["80"]
+      ports = ["80", "8000","3000"] // port 8000 and 3000 for testing
     }
     target_tags =  [ "http-server" ]
     source_ranges = [ "0.0.0.0/0" ]
@@ -45,7 +45,7 @@ resource "google_compute_firewall" "default" {
 
 //creating cloud sql instance
 resource "google_sql_database_instance" "instance" {
-  name = "test-db-instance2"
+  name = "todo-db-instance"
   database_version = "MYSQL_8_0"
   settings {
     tier = "db-f1-micro"
@@ -55,15 +55,15 @@ resource "google_sql_database_instance" "instance" {
 
 //creating database
 resource "google_sql_database" "database" {
-  name = "test-db"
+  name = "todos"
   instance = google_sql_database_instance.instance.name
 }
 
 //creating new user
 resource "google_sql_user" "users" {
-  name     = "test-user"
+  name     = "codimite"
   instance = google_sql_database_instance.instance.name
   host     = "%"
-  password = "Test123"
+  password = "codimite"
 }
 
